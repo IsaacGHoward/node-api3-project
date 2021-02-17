@@ -19,9 +19,16 @@ router.get('/:id', middleware.validateUserId, (req, res) => {
   res.send(req.user);
 });
 
-router.post('/', (req, res) => {
+router.post('/', middleware.validateUser, (req, res) => {
   // RETURN THE NEWLY CREATED USER OBJECT
   // this needs a middleware to check that the request body is valid
+  db.insert(req.body)
+  .then((resp) =>{
+    res.send(resp);
+  })
+  .catch((err) => {
+    res.status(400).send(err);
+  })
 });
 
 router.put('/:id', (req, res) => {

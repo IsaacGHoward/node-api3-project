@@ -21,7 +21,12 @@ function validateUserId(req, res, next) {
 }
 
 function validateUser(req, res, next) {
-  // DO YOUR MAGIC
+  if(Object.keys(req.body).length === 0)
+    res.status(400).send({ message: "missing user data" });
+  else if(!req.body.name)
+    res.status(400).send({ message: "missing required name field" });
+  else
+    next();
 }
 
 function validatePost(req, res, next) {
@@ -31,5 +36,6 @@ function validatePost(req, res, next) {
 // do not forget to expose these functions to other modules
 module.exports = {
   logger: logger,
-  validateUserId: validateUserId
+  validateUserId: validateUserId,
+  validateUser: validateUser
 };

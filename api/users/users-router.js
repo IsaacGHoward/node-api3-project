@@ -31,10 +31,20 @@ router.post('/', middleware.validateUser, (req, res) => {
   })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', middleware.validateUserId, middleware.validateUser, (req, res) => {
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  db.update(req.params.id, req.body)
+  .then((resp) =>{
+    db.getById(req.params.id)
+    .then((r) => {
+      res.send(r);
+    })
+  })
+  .catch((err) => {
+    res.status(400).send(err);
+  })
 });
 
 router.delete('/:id', (req, res) => {

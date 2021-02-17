@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const db = require('./users-model');
+const postsDB = require('../posts/posts-model');
 const middleware = require('../middleware/middleware');
 
 router.get('/', (req, res) => {
@@ -71,10 +72,14 @@ router.get('/:id/posts', middleware.validateUserId, (req, res) => {
 
 });
 
-router.post('/:id/posts', (req, res) => {
+router.post('/:id/posts', middleware.validateUserId, middleware.validatePost, (req, res) => {
   // RETURN THE NEWLY CREATED USER POST
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  postsDB.insert({text: req.body.text, user_id: req.params.id})
+  .then((resp) => {
+    res.send(resp);
+  })
 });
 
 // do not forget to export the router

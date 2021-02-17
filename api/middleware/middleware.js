@@ -1,3 +1,6 @@
+const userdb = require('../users/users-model');
+
+
 function logger(req, res, next) {
   console.log(
     `[${new Date().toISOString()}] ${req.method} to ${req.url}`
@@ -6,7 +9,15 @@ function logger(req, res, next) {
 }
 
 function validateUserId(req, res, next) {
-  // DO YOUR MAGIC
+  userdb.getById(req.params.id)
+  .then((response) => {
+    if(response){
+      req.user = response;
+      next();
+    }
+    else
+      res.status(404).send({ message: "user not found" });
+  })
 }
 
 function validateUser(req, res, next) {

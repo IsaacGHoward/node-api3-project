@@ -2,13 +2,21 @@ const express = require('express');
 
 const router = express.Router();
 
+const db = require('./users-model');
+const middleware = require('../middleware/middleware');
+
 router.get('/', (req, res) => {
   // RETURN AN ARRAY WITH ALL THE USERS
+  db.get()
+  .then((resp) => {
+    res.send(resp);
+  })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', middleware.validateUserId, (req, res) => {
   // RETURN THE USER OBJECT
   // this needs a middleware to verify user id
+  res.send(req.user);
 });
 
 router.post('/', (req, res) => {
@@ -39,3 +47,4 @@ router.post('/:id/posts', (req, res) => {
 });
 
 // do not forget to export the router
+module.exports = router;

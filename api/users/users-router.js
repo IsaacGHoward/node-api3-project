@@ -47,9 +47,13 @@ router.put('/:id', middleware.validateUserId, middleware.validateUser, (req, res
   })
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', middleware.validateUserId, (req, res) => {
   // RETURN THE FRESHLY DELETED USER OBJECT
   // this needs a middleware to verify user id
+  db.remove(req.params.id)
+  .then(() => {
+    res.send({message: "user deleted"});
+  })
 });
 
 router.get('/:id/posts', (req, res) => {

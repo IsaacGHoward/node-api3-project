@@ -50,15 +50,21 @@ router.put('/:id', middleware.validateUserId, middleware.validateUser, (req, res
 router.delete('/:id', middleware.validateUserId, (req, res) => {
   // RETURN THE FRESHLY DELETED USER OBJECT
   // this needs a middleware to verify user id
-  db.remove(req.params.id)
-  .then(() => {
-    res.send({message: "user deleted"});
+  db.getById(req.params.id)
+  .then((resp) => {
+    db.remove(req.params.id)
+    .then(() => {
+      res.send(resp);
+    })
   })
+  
+  
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', middleware.validateUserId, (req, res) => {
   // RETURN THE ARRAY OF USER POSTS
   // this needs a middleware to verify user id
+
 });
 
 router.post('/:id/posts', (req, res) => {

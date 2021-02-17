@@ -1,5 +1,5 @@
 const userdb = require('../users/users-model');
-
+const postdb = require('../posts/posts-model');
 
 function logger(req, res, next) {
   console.log(
@@ -17,6 +17,18 @@ function validateUserId(req, res, next) {
     }
     else
       res.status(404).send({ message: "user not found" });
+  })
+}
+
+function validatePostId(req, res, next) {
+  postdb.getById(req.params.id)
+  .then((response) => {
+    if(response){
+      req.post = response;
+      next();
+    }
+    else
+      res.status(404).send({ message: "post not found" });
   })
 }
 
@@ -43,5 +55,6 @@ module.exports = {
   logger: logger,
   validateUserId: validateUserId,
   validateUser: validateUser,
-  validatePost: validatePost
+  validatePost: validatePost,
+  validatePostId: validatePostId
 };
